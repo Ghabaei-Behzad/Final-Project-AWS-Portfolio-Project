@@ -54,7 +54,7 @@ Logical traffic Flow:
 4.) Data Access - Instances retrieve or store data in the Amazon S3 bucket as required by the application logic.
 5.) Security - All traffic within the VPC is governed by the Default Security Group, which by default allows communication between these internal resources.
 
-
+<img width="1408" height="768" alt="ArchitectureDiagram" src="https://github.com/user-attachments/assets/baf03ffd-be93-44d3-8e91-b5905c85984a" />
 
    
 
