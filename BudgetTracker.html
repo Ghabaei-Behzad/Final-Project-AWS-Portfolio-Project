@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+:root {
+  --bg: #f4f7f6;     
+  --primary: #4a90e2;  
+  --success: #2ecc71;  
+  --danger: #e74c3c;   
+  --text: #2c3e50;     
+}
+
+
+body { font-family: 'Inter', sans-serif; 
+      background: var(--bg); 
+      color: var(--text);
+     }
+
+.container { max-width: 500px;   
+            margin: 40px auto;   
+            padding: 20px; }     
+
+.header { text-align: center;     
+         margin-bottom: 30px;    
+        }
+
+.balance-card { 
+  background: white;          
+  padding: 20px;                
+  border-radius: 15px;          
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+}
+
+.stats-grid { 
+             display: grid;               
+             grid-template-columns: 1fr 1fr; 
+             gap: 15px;                    
+             margin: 20px 0;                
+            }
+
+.card { padding: 15px;      
+       border-radius: 12px;  
+       color: white;       
+       text-align: center;   
+      }
+.income { background: var(--success); } 
+.expense { background: var(--danger); } 
+
+.form-section { background: white; 
+               padding: 20px;        
+               border-radius: 15px;    
+               margin-bottom: 20px;   
+              }
+
+input { 
+  width: 100%;           
+  padding: 12px;           
+  margin: 10px 0;          
+  border: 1px solid #ddd;   
+  border-radius: 8px;    
+  box-sizing: border-box; 
+}
+
+.radio-group { display: flex;      
+              gap: 10px;         
+              margin-bottom: 10px; 
+             }
+.radio-group button { flex: 1;           
+                     padding: 8px;            
+                     cursor: pointer; 
+                     border: 1px solid #ddd;  
+                     border-radius: 8px;     
+                    }
+.radio-group button.active { background: var(--primary); 
+                            color: white;               
+                            border-color: var(--primary);
+                           }
+
+.submit-btn { 
+  width: 100%;                
+  padding: 12px;              
+  background: var(--primary);  
+  color: white;            
+  border: none;                
+  border-radius: 8px;           
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.submit-btn:hover {            
+  transform: translateY(-2px); 
+}
+
+.transaction-list { list-style: none; padding: 0; } 
+.item { 
+  background: white;            
+  margin-bottom: 10px;           
+  padding: 15px;                 
+  border-radius: 10px;          
+  display: flex;                
+  justify-content: space-between; 
+  align-items: center;
+  border-left: 5px solid #ccc;  
+  animation: fadeIn 0.4s ease;
+}
+
+.item.income { border-left-color: var(--success); }  
+.item.expense { border-left-color: var(--danger); } 
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.del-btn { background: none;     
+          border: none; 
+          color: #ccc;         
+          cursor: pointer; 
+          font-size: 20px;      
+         }
+.del-btn:hover { color: var(--danger); }  
+.error-msg { color: var(--danger); font-size: 0.8em; } 
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <h1>Budget Visualizer</h1>
+        <div class="balance-card">
+            <span>Current Balance</span>
+            <h2 id="balance-display">$0.00</h2>
+        </div>
+    </header>
+
+    <div class="stats-grid">
+        <div class="card income">
+            <h4>Income</h4>
+            <p id="income-display">+$0.00</p>
+        </div>
+        <div class="card expense">
+            <h4>Expenses</h4>
+            <p id="expense-display">-$0.00</p>
+        </div>
+    </div>
+
+    <section class="form-section">
+        <h3>Add New Transaction</h3>
+        <form id="budget-form">
+            <p id="error-msg" class="error-msg" style="display: none;"></p>
+            <input type="text" id="description" placeholder="Description (e.g., Grocery, Salary)" />
+            <input type="number" id="amount" placeholder="Amount" />
+            <div class="radio-group">
+                <button type="button" id="btn-income" class="type-btn">Income</button>
+                <button type="button" id="btn-expense" class="type-btn active">Expense</button>
+            </div>
+            <button type="submit" class="submit-btn">Add Transaction</button>
+        </form>
+    </section>
+
+    <section class="history">
+        <h3>History</h3>
+        <ul id="transaction-list" class="transaction-list"></ul>
+    </section>
+</div>
+
+<script>
+
+let transactions = JSON.parse(localStorage.getItem('budget_data')) || [];
+let currentType = 'expense';
+
+const form = document.getElementById('budget-form');
+const list = document.getElementById('transaction-list');
+const balanceEl = document.getElementById('balance-display');
+const incomeEl = document.getElementById('income-display');
+const expenseEl = document.getElementById('expense-display');
+const errorEl = document.getElementById('error-msg');
+
+
+function updateTotals() {
+    const income = transactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const expenses = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const balance = income - expenses;
+
+ 
+    balanceEl.textContent = `$${balance.toFixed(2)}`;
+    balanceEl.className = balance >= 0 ? 'pos' : 'neg';
+    incomeEl.textContent = `+$${income.toFixed(2)}`;
+    expenseEl.textContent = `-$${expenses.toFixed(2)}`;
+    
+ 
+    localStorage.setItem('budget_data', JSON.stringify(transactions));
+}
+
+function renderTransactions() {
+    list.innerHTML = transactions.length === 0 ? '<p class="empty">No transactions yet.</p>' : '';
+
+    transactions.forEach(t => {
+        const li = document.createElement('li');
+        li.className = `item ${t.type}`;
+        li.innerHTML = `
+            <div class="item-info">
+                <strong>${t.description} </strong>
+                <small>${t.date}</small>
+            </div>
+            <div class="item-amount">
+                <span>${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}</span>
+                <button class="del-btn" onclick="deleteTransaction(${t.id})">×</button>
+            </div>
+        `;
+        list.appendChild(li);
+    });
+}
+
+window.deleteTransaction = (id) => {
+    transactions = transactions.filter(t => t.id !== id);
+    render();
+};
+
+function render() {
+    updateTotals();
+    renderTransactions();
+}
+
+
+document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentType = e.target.id === 'btn-income' ? 'income' : 'expense';
+    });
+});
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const desc = document.getElementById('description').value;
+    const amt = document.getElementById('amount').value;
+
+    if (!desc.trim() || !amt || parseFloat(amt) <= 0) {
+        errorEl.textContent = 'Please provide a valid description and a positive amount.';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    const newTransaction = {
+        id: Date.now(),
+        description: desc,
+        amount: parseFloat(amt),
+        type: currentType,
+        date: new Date().toLocaleDateString()
+    };
+
+    transactions.push(newTransaction);
+    
+    // Reset Form
+    form.reset();
+    errorEl.style.display = 'none';
+    render();
+});
+
+render();
+</script>
+</body>
+</html>
