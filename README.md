@@ -62,6 +62,13 @@ d.) Default Security Group: Acts as a virtual firewall for the VPC, initially al
 
 <img width="1408" height="768" alt="ArchitectureDiagram" src="https://github.com/user-attachments/assets/baf03ffd-be93-44d3-8e91-b5905c85984a" />
 
+ELB.  Resource Map.
+<img width="1142" height="252" alt="4 - Copy" src="https://github.com/user-attachments/assets/76c3b1cd-2bf3-4c18-b18a-6db7b63aef6a" />
+AWS Template Architecture.
+<img width="709" height="246" alt="resMap" src="https://github.com/user-attachments/assets/dd59c29d-48c4-408a-8f91-0fc03a43d549" />
+
+
+
    
 
 
