@@ -48,7 +48,7 @@ b.) Elastic Load Balancer (ALB): Situated in public subnets to receive external 
 c.) Auto Scaling Group (ASG): Manages a minimum of two Amazon Linux 2 EC2 instances across multiple Availability Zones (AZs) for high availability.
 d.) Default Security Group: Acts as a virtual firewall for the VPC, initially allowing all inbound traffic from other members of the same group while blocking external traffic until rules are added.
 
-Logical traffic Flow: 
+# Logical traffic Flow: 
 1.) User Request - External users access the application via the Application Load Balancer (ALB) 
 2.) Load Balancer - The ALB evaluates health checks and routes traffic to instances within the Auto Scaling Group.
 3.) EC2 Instances - At least two Amazon Linux 2 instances (configured via a Launch Template) process the requests.
