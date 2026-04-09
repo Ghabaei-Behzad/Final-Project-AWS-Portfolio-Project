@@ -3,4 +3,4 @@ design, deploy, and document a cloud architecture -  Compute Services -  Infrast
 
 Based on your template, this architecture establishes a highly available web server environment. Traffic enters via the Application Load Balancer (ALB), which is governed by the ALBSecurityGroup to allow public HTTP access. The ALB then forwards requests to the Auto Scaling Group (ASG).
 
-#project overview and setup instructions
+## project overview and setup instructions
