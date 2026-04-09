@@ -7,8 +7,13 @@ Create Stack > Under Prerequisite - Prepare Template > click Build from Infrastr
 <img width="1366" height="641" alt="4" src="https://github.com/user-attachments/assets/5a8081c8-eedc-43ac-9e20-b5c96f346aa5" />
 <img width="1366" height="641" alt="5" src="https://github.com/user-attachments/assets/0e68deae-a45b-42d9-96b6-ab0d235db259" />
 <img width="1366" height="649" alt="6" src="https://github.com/user-attachments/assets/04db4ebb-bbe5-4d3d-b151-6681fa826dc5" />
-
 <img width="709" height="246" alt="resMap" src="https://github.com/user-attachments/assets/558cfed3-20d6-47a5-9598-e07dd02eeb0c" />
+
+Here are a few output samples:
+<img width="1366" height="673" alt="Browser" src="https://github.com/user-attachments/assets/a10e8939-4450-4649-8ca0-cfdbcf81203d" />
+<img width="1366" height="669" alt="BudgetTracker" src="https://github.com/user-attachments/assets/bd4e533b-4327-4115-9531-b5e6c135d5e9" />
+
+
 
 
 
