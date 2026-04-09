@@ -25,13 +25,37 @@ a.) Access to an AWS account with an IAM user or role that has permissions to us
 b.)  Have a Virtual Private Cloud (VPC) that has access to the internet. This template requires a default VPC, which comes with newer AWS accounts. 
 Instructions.
 a.) Go to the AWS Console > in the search bar type CloudFormation > click on Create Stack (or hamburger icon > Stacks > Create Stack)
-b.) Under Prerequisite - Prepare Template > click Build from Infrastructure Composer > Under Build from Infrastructure Composer > Click Create in Infrastructure Composer > At the top there are two choices Canvas/Template and Yaml/Json > choose Template and Yaml. > you need a yaml file, so in another browser tab go to my github repository "https://github.com/Ghabaei-Behzad/Final-Project-AWS-Portfolio-Project/edit/main/README.md" find MyStack-ASG.yaml. Copy the file from github and in the CloudFormation Infrastructure Composer Template code editor, paste it. > A button appears to "Validate" and "Create Template". first Validate, and if the yaml file is "Valid" click "Create Template" > pop up message which mentions "it's putting the template in an existing bucket" > click Confirm and continue to CloudFormation. > at Create Stack page click Next > Specify Stack Details, Stack Name: MyStack (no spaces) > Under Parameters the instance type is default t3.micro (free tier) > Latest AMI is probably: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 > under subnets click Subnets that you wanted (probably up to 6 available) click all or at least 2. > Under VPCID click your security group (choosing the default provided) > click next > Configure Stack Options we will keep the default choices made. > at the bottom Capabilities click the box saying "I acknowledge that AWS CloudFormation might create IAM resources." > click Next > last page at the bottom says submit, click it. > If you get a ROLLBACK_IN_PROGRESS (in red) then delete the stack and start over again trying a different yaml file. I recommend amazon's https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.walkthrough.html (If you start over again go to S3 > Under General Purpose buckets > click the cf- bucket and "empty" > then exit  > after that, click the s3 cf- bucket again and click delete. Then start over after s3 has been cleared of previous ClouFormation delete, with the new yaml file.
-c.) If you get CREATE_IN_PROGRESS then get 
-
+b.) Under Prerequisite - Prepare Template > click Build from Infrastructure Composer > Under Build from Infrastructure Composer > Click Create in Infrastructure Composer > At the top there are two choices Canvas/Template and Yaml/Json > choose Template and Yaml. > you need a yaml file, so in another browser tab go to my github repository "https://github.com/Ghabaei-Behzad/Final-Project-AWS-Portfolio-Project/edit/main/README.md" find MyStack-ASG.yaml. Copy the file from github and in the CloudFormation Infrastructure Composer Template code editor, paste it. > A button appears to "Validate" and "Create Template". first Validate, and if the yaml file is "Valid" click "Create Template" > pop up message which mentions "it's putting the template in an existing bucket" > click Confirm and continue to CloudFormation. > at Create Stack page click Next > Specify Stack Details, Stack Name: MyStack (no spaces) > Under Parameters the instance type is default t3.micro (free tier) > Latest AMI is probably: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 > under subnets click Subnets that you wanted (probably up to 6 available) click all or at least 2. > Under VPCID click your security group (choosing the default provided) > click next > Configure Stack Options we will keep the default choices made. > at the bottom Capabilities click the box saying "I acknowledge that AWS CloudFormation might create IAM resources." > click Next > last page at the bottom says submit, click it. > If you get a ROLLBACK_IN_PROGRESS (in red) then delete the stack and start over again trying a different yaml file. I recommend amazon's https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.walkthrough.html (If you start over again go to S3 > Under General Purpose buckets > click the cf- bucket and "empty" then permanently delete > then empty > then exit  > after that, click the s3 cf- bucket again put in the entire name and click delete bucket. Then start over after s3 has been cleared of previous ClouFormation bucket created, 
+c.) next with the new yaml file. or If you get CREATE_IN_PROGRESS wait for 3 minutes,  until CREATE_COMPLETE (in green) > because the stack is running green, you can go to CloudFormation > Stacks > Outputs > click on the URL (open in a new tab) and there is an echo message. From the ClouFormation template you have an echo message in html code. Take a look at EC2 instances. Take a look at S3 General Purpose Bucket, take a look at EC2 Load Balancer and EC2 Auto-Scaling Groups. (these are on the side tab when you scroll down.)
+(Optional) You could put in my web app if you want. Look at my github.com repository, under BudgetTracker.html and save this code to your device. Then go to S3 > General Purpose buckets > choose upload > upload the file called BudgetTracker.html > then choose Open (at the top of BudgetTracker.html uploaded file in S3, cf- file.) End of Project.
+d.) What we did is a transition to a high-availability setup, we’ll swap the single EC2 instance for an Auto Scaling Group (ASG) and an Application Load Balancer (ALB). We added a 
+a.) Launch Template: I used a LaunchTemplate instead of a LaunchConfiguration, as it’s the current AWS best practice.
+b.) Security Groups: I added a two-tier security model. The ALB is open to the world, but the Instances only accept traffic from the ALB.
+c.) Target Group: This acts as the bridge between your Load Balancer and the Auto Scaling Group.
+d.) Parameters: I added VpcId and Subnets parameters, as an ALB requires at least two Availability Zones to function correctly.
 
 * Resources * 
 1. "Introduction To AWS CloudFormation" | Jenna Pederson | " https://www.jennapederson.com/blog/introduction-to-aws-cloudformation/#:~:text=AWS%20CloudFormation%20is%20a%20framework,Mappings%2C%20Resources%2C%20and%20Outputs. "
 2. "AWS CloudFormation Tutorial" | "https://www.youtube.com/watch?v=KO0zl6deRfs&t=526s"
+3. aws.amazon.com | "Creating Your First Stack" | https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.walkthrough.html
+4. # Architecture Components
+
+
+## AWS CloudFormation: The management layer that automates the deployment of the entire stack.
+a.) Amazon S3: An independent object store used for hosting static assets or software authorization files.
+b.) Elastic Load Balancer (ALB): Situated in public subnets to receive external traffic and distribute it to the healthy backend instances.
+c.) Auto Scaling Group (ASG): Manages a minimum of two Amazon Linux 2 EC2 instances across multiple Availability Zones (AZs) for high availability.
+d.) Default Security Group: Acts as a virtual firewall for the VPC, initially allowing all inbound traffic from other members of the same group while blocking external traffic until rules are added.
+
+Logical traffic Flow: 
+1.) User Request - External users access the application via the Application Load Balancer (ALB) 
+2.) Load Balancer - The ALB evaluates health checks and routes traffic to instances within the Auto Scaling Group.
+3.) EC2 Instances - At least two Amazon Linux 2 instances (configured via a Launch Template) process the requests.
+4.) Data Access - Instances retrieve or store data in the Amazon S3 bucket as required by the application logic.
+5.) Security - All traffic within the VPC is governed by the Default Security Group, which by default allows communication between these internal resources.
+
+
+
    
 
 
