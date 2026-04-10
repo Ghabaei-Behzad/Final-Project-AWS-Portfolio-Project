@@ -64,7 +64,7 @@ AWS CloudFormation is an Infrastructure as Code (IaC) service that allows you to
 
 Load Balancer.  Resource Map.
 <img width="1142" height="252" alt="4 - Copy" src="https://github.com/user-attachments/assets/76c3b1cd-2bf3-4c18-b18a-6db7b63aef6a" />
-AWS Template Architecture.
+AWS Template Architecture Composer.
 <img width="709" height="246" alt="resMap" src="https://github.com/user-attachments/assets/dd59c29d-48c4-408a-8f91-0fc03a43d549" />
 
 
