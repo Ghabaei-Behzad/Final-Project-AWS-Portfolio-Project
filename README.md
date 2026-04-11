@@ -25,7 +25,7 @@ Based on your template, this architecture establishes a highly available web ser
 ## Project overview and setup instructions
 AWS CloudFormation is an Infrastructure as Code (IaC) service that allows you to model, provision, and manage AWS resources, like EC2 instances or S3 buckets, using declarative JSON or YAML templates. By grouping resources into "stacks," it automates deployment, updates, and deletion in the correct order, ensuring consistent, repeatable infrastructure. *1 
 
-# The Key concepts are, 
+# The key concepts are, 
 #### a.) Templates: Text files (YAML is recommended) that define your infrastructure components and their settings.
 #### b.) Stacks: The instantiation of a template; a single unit that manages the lifecycle of all resources defined in the template.
 #### c.) Resources: The required section in a template declaring the actual AWS components to create (i.e., AWS::EC2::Instance).
