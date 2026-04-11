@@ -8,6 +8,20 @@ Design, deploy, and document a Cloud Architecture, Compute Services, Infrastruct
 
 Based on your template, this architecture establishes a highly available web server environment. Traffic enters via the Application Load Balancer (ALB), which is governed by the ALBSecurityGroup to allow public HTTP access. The ALB then forwards requests to the Auto Scaling Group (ASG).
 
+## Here are the services used by the templates called "MyStack-ASG.yaml" and "secondaryTemplate.yaml"
+#### 1.) ALBSecurityGroup
+#### 2.) ALBTargetGroup 
+#### 3.) InstanceSecurityGroup 
+#### 4.) WebServerLaunchTemplate 
+#### 5.) ApplicationLoadBalancer
+#### 6.) ALBListener, 
+#### 7.) WebServerASG.
+
+## Here are the services used by the template called "amazon.yaml"
+#### 1.) WebServerSecurityGroup
+#### 2.) WebServer
+
+
 ## Project overview and setup instructions
 AWS CloudFormation is an Infrastructure as Code (IaC) service that allows you to model, provision, and manage AWS resources, like EC2 instances or S3 buckets, using declarative JSON or YAML templates. By grouping resources into "stacks," it automates deployment, updates, and deletion in the correct order, ensuring consistent, repeatable infrastructure. *1 
 
